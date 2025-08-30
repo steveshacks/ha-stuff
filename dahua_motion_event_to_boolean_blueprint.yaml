@@ -41,12 +41,13 @@ blueprint:
 mode: restart
 max_exceeded: silent
 
-alias: Dahua motion event for !camera_name !motion_event !region_name
+alias: Dahua motion event for {{ device_attr(!input camera_name,"name") }}  !input motion_event !input region_name
 
 triggers:
   - event_type: dahua_event_received
     event_data:
-      Code: !motion_event
+      Code: !input motion_event
+      name: {{ device_attr(!input camera_name,"name") }}
       action: Start
     trigger: event
 conditions: []
