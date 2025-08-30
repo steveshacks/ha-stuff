@@ -1,19 +1,36 @@
 blueprint:
 # author : AndySymons https://community.home-assistant.io/t/how-best-to-interface-ring-camera-motion-sensors-to-alarmo/826730/1
-  name: Motion event to input boolean
-  description: Detects a motion event and turns on a boolean helper for 5 seconds, then off again
+# Modified by Steve 
+  name: Dahua event to input boolean
+  description: Detects a dahua motion event and turns on a boolean helper for 5 seconds, then off again
   domain: automation
 
   input:
-    motion_event:
-      name: Motion Event
-      description: Motion event to trigger this automation
+    camera:
+      name: Camera entity
+      description: Camera name (dahua) 
       selector:
-        entity:
+        device:
           filter:
-            domain: event
-            device_class: motion
-          multiple: false 
+            - integration: dahua
+          entity:
+            - domain: camera
+
+    motion_event:
+      name: Event
+      description: Event type
+      selector:
+        select:
+          options:
+            - SmartMotionHuman
+            - CrossRegionDetection
+            - VideoMotion
+
+     region:
+       name: Region Name
+       description: Region (data.data.Name)
+       selector:
+         text:
 
     helper_input_boolean:
       name: Motion helper
@@ -24,13 +41,17 @@ blueprint:
             domain: input_boolean
           multiple: false 
 
-mode: single
+mode: restart
 max_exceeded: silent
 
-triggers:
-  - trigger: state
-    entity_id: !input motion_event
+alias: Dahua motion event for !camera !motion_event !region
 
+triggers:
+  - event_type: dahua_event_received
+    event_data:
+      Code: !motion_event
+      action: Start
+    trigger: event
 conditions: []
 
 actions:
@@ -41,8 +62,8 @@ actions:
 
   - delay:
       hours: 0
-      minutes: 1
-      seconds: 0
+      minutes: 0
+      seconds: 5
 
   - action: input_boolean.turn_off
     target:
@@ -51,5 +72,5 @@ actions:
 
   - delay:
       hours: 0
-      minutes: 1
-      seconds: 0
+      minutes: 0
+      seconds: 5
