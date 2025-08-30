@@ -24,7 +24,7 @@ blueprint:
             - SmartMotionHuman
             - CrossRegionDetection
             - VideoMotion
-    region:
+    region_name:
       name: Region Name
       description: Region (data.data.Name)
       selector:
@@ -41,7 +41,7 @@ blueprint:
 mode: restart
 max_exceeded: silent
 
-alias: Dahua motion event for !camera_name !motion_event !region
+alias: Dahua motion event for !camera_name !motion_event !region_name
 
 triggers:
   - event_type: dahua_event_received
