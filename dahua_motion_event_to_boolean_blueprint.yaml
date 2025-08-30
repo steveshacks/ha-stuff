@@ -29,6 +29,7 @@ blueprint:
       description: Region (data.data.Name)
       selector:
         text:
+        default: ""
     helper_input_boolean:
       name: Motion helper
       description: Input boolean helper to be operated by this automation
@@ -38,16 +39,17 @@ blueprint:
             domain: input_boolean
           multiple: false 
 
+variables:
+  camera_id: !input camera_name
+  
 mode: restart
 max_exceeded: silent
-
-alias: Dahua motion event for {{ device_attr("!input camera_name","name") }}  !input motion_event !input region_name
 
 triggers:
   - event_type: dahua_event_received
     event_data:
       Code: !input motion_event
-      name: {{ device_attr("!input camera_name","name") }}
+      name: {{ device_attr( {{ camera_id }} ,"name") }}
       action: Start
     trigger: event
 conditions: []
