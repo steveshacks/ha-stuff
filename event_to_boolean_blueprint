@@ -1,0 +1,55 @@
+blueprint:
+# author : AndySymons https://community.home-assistant.io/t/how-best-to-interface-ring-camera-motion-sensors-to-alarmo/826730/1
+  name: Motion event to input boolean
+  description: Detects a motion event and turns on a boolean helper for 5 seconds, then off again
+  domain: automation
+
+  input:
+    motion_event:
+      name: Motion Event
+      description: Motion event to trigger this automation
+      selector:
+        entity:
+          filter:
+            domain: event
+            device_class: motion
+          multiple: false 
+
+    helper_input_boolean:
+      name: Motion helper
+      description: Input boolean helper to be operated by this automation
+      selector:
+        entity:
+          filter:
+            domain: input_boolean
+          multiple: false 
+
+mode: single
+max_exceeded: silent
+
+triggers:
+  - trigger: state
+    entity_id: !input motion_event
+
+conditions: []
+
+actions:
+  - action: input_boolean.turn_on
+    target:
+      entity_id: !input helper_input_boolean
+    data: {}
+
+  - delay:
+      hours: 0
+      minutes: 1
+      seconds: 0
+
+  - action: input_boolean.turn_off
+    target:
+      entity_id: !input helper_input_boolean
+    data: {}
+
+  - delay:
+      hours: 0
+      minutes: 1
+      seconds: 0
