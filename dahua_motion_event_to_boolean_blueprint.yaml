@@ -1,9 +1,10 @@
+# Based on code by AndySymons https://community.home-assistant.io/t/how-best-to-interface-ring-camera-motion-sensors-to-alarmo/826730/1
+
 blueprint:
-# author : AndySymons https://community.home-assistant.io/t/how-best-to-interface-ring-camera-motion-sensors-to-alarmo/826730/1
-# Modified by Steve 
   name: Dahua event to input boolean
   description: Detects a dahua motion event and turns on a boolean helper for 5 seconds, then off again
   domain: automation
+  author: Steve
   input:
     camera_name:
       name: Camera entity
@@ -14,7 +15,6 @@ blueprint:
             - integration: dahua
           entity:
             - domain: camera
-
     motion_event:
       name: Event
       description: Event type
@@ -24,13 +24,11 @@ blueprint:
             - SmartMotionHuman
             - CrossRegionDetection
             - VideoMotion
-
-     region:
-       name: Region Name
-       description: Region (data.data.Name)
-       selector:
-         text:
-
+    region:
+      name: Region Name
+      description: Region (data.data.Name)
+      selector:
+        text:
     helper_input_boolean:
       name: Motion helper
       description: Input boolean helper to be operated by this automation
