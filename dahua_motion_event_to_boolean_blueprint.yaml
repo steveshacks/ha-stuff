@@ -4,7 +4,6 @@ blueprint:
   name: Dahua event to input boolean
   description: Detects a dahua motion event and turns on a boolean helper for 5 seconds, then off again
   domain: automation
-
   input:
     camera:
       name: Camera entity
