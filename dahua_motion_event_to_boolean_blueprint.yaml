@@ -5,7 +5,7 @@ blueprint:
   description: Detects a dahua motion event and turns on a boolean helper for 5 seconds, then off again
   domain: automation
   input:
-    camera:
+    camera_name:
       name: Camera entity
       description: Camera name (dahua) 
       selector:
@@ -43,7 +43,7 @@ blueprint:
 mode: restart
 max_exceeded: silent
 
-alias: Dahua motion event for !camera !motion_event !region
+alias: Dahua motion event for !camera_name !motion_event !region
 
 triggers:
   - event_type: dahua_event_received
