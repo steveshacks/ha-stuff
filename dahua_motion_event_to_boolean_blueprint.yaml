@@ -47,7 +47,7 @@ triggers:
   - event_type: dahua_event_received
     event_data:
       Code: !input motion_event
-      name: {{ device_attr("!input camera_name","name") }}
+      name: "{{ device_attr("!input camera_name","name") }}"
       action: Start
     trigger: event
 conditions: []
