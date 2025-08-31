@@ -29,6 +29,7 @@ blueprint:
       description: Region (data.data.Name)
       selector:
         text:
+          type: text
     helper_input_boolean:
       name: Motion helper
       description: Input boolean helper to be operated by this automation
