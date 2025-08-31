@@ -6,7 +6,7 @@ blueprint:
   domain: automation
   author: Steve
   input:
-    camera_name:
+    camera:
       name: Camera entity
       description: Camera name (dahua) 
       selector:
@@ -44,7 +44,9 @@ blueprint:
           multiple: false 
 
 variables:
-  camera_id: !input camera_name
+  input_camera: !input camera
+  input_camera_name: "{{input_camera|expand|map(attribute='attributes.camera_name', default='none')|list}}"
+  
   
 mode: restart
 max_exceeded: silent
@@ -54,9 +56,9 @@ triggers:
     event_type: dahua_event_received
     event_data:
       Code: !input motion_event
-      DeviceName: "{{ device_attr(camera_id,'name_by_user') }}"
+      DeviceName: " {{ input_camera_name }}"
       action: Start
-conditions: []
+#conditions: []
 
 actions:
   - action: input_boolean.turn_on
