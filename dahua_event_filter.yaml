@@ -1,0 +1,112 @@
+blueprint:
+  name: Dahua event filter
+  description: Detects a dahua motion event and turns on a boolean helper for 5 seconds, then off again
+  domain: automation
+  author: Steves Hacks
+  input:
+    camera:
+      name: Camera entity
+      description: Camera name (dahua)
+      selector:
+        device:
+          filter:
+          - integration: dahua
+          entity:
+          - domain:
+            - camera
+          multiple: false
+    motion_events:
+      name: Event
+      description: Event type
+      selector:
+        select:
+          options:
+          - SmartMotionHuman
+          - SmartMotionVehicle
+          - CrossRegionDetection
+          - VideoMotion
+          custom_value: false
+          multiple: true
+          sort: false
+    region_name:
+      name: Region Name
+      description: Region (optional, for SmartMotion events)
+      selector:
+        text:
+          type: text
+          multiline: false
+          multiple: false
+      default: ''
+
+    rule_name:
+      name: IVS Rule Name
+      description: IVS Rule Name (optional, for CrossRegionDetection or CrossLineDetection)
+      selector:
+        text:
+          type: text
+          multiline: false
+          multiple: false
+      default: ''
+
+    helper_input_boolean:
+      name: Motion helper
+      description: Input boolean helper to be operated by this automation
+      selector:
+        entity:
+          filter:
+          - domain:
+            - input_boolean
+          multiple: false
+variables:
+  input_camera: !input camera
+  input_camera_name: "{{ device_attr( input_camera , 'name') }}"
+  input_motion_events: !input motion_events
+  input_region_name : !input region_name
+  input_rule_name : !input rule_name
+
+mode: restart
+max_exceeded: silent
+
+triggers:
+- trigger: event
+  event_type: dahua_event_received
+  event_data:
+    action: Start
+
+conditions:
+  - condition: and
+    conditions:
+    - condition: template
+      value_template: "{{ input_motion_events | contains(trigger.event.data.Code) }}"
+    - condition: template
+      value_template: "{{ trigger.event.data.name == input_camera_name }}"
+    - condition: template
+      value_template: "{{ (input_region_name == '') or (trigger.event.data.data.RegionName | contains(input_region_name)) }}"
+    - condition: template
+      value_template: "{{ (input_rule_name == '') or (trigger.event.data.data.Name == input_rule_name) }}"
+    
+
+actions:
+
+- action: notify.mobile_app_steve_mobile
+  metadata: {}
+  data:
+    message: "motion debug on {{ input_camera_name }} events {{ motion_events }} data  {{ trigger.event.data }}"
+    title: Debug dahua template
+    data:
+      channel: attention
+
+- action: input_boolean.turn_on
+  target:
+     entity_id: !input helper_input_boolean
+  data: {}
+
+- delay:
+    hours: 0
+    minutes: 0
+    seconds: 5
+
+- action: input_boolean.turn_off
+  target:
+    entity_id: !input helper_input_boolean
+  data: {}
