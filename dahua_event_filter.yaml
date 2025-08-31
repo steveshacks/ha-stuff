@@ -88,14 +88,6 @@ conditions:
 
 actions:
 
-- action: notify.mobile_app_steve_mobile
-  metadata: {}
-  data:
-    message: "motion debug on {{ input_camera_name }} events {{ motion_events }} data  {{ trigger.event.data }}"
-    title: Debug dahua template
-    data:
-      channel: attention
-
 - action: input_boolean.turn_on
   target:
      entity_id: !input helper_input_boolean
