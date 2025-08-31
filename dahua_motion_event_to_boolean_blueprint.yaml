@@ -27,10 +27,11 @@ blueprint:
     region_name:
       name: Region Name
       description: Region (data.data.Name)
+      optional:
       selector:
         text:
           type: text
-        optional:
+        
     helper_input_boolean:
       name: Motion helper
       description: Input boolean helper to be operated by this automation
