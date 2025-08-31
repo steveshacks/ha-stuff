@@ -58,7 +58,7 @@ triggers:
       Code: !input motion_event
       DeviceName: " {{ input_camera_name }}"
       action: Start
-#conditions: []
+    conditions: []
 
 actions:
   - action: input_boolean.turn_on
