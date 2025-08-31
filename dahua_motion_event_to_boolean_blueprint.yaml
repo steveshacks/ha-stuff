@@ -45,7 +45,7 @@ blueprint:
 
 variables:
   input_camera: !input camera
-  input_camera_name: "{{input_camera|expand|map(attribute='attributes.camera_name', default='none')|list}}"
+  input_camera_name: "{{input_camera|expand|map(attribute='attributes.name', default='none')|list}}"
   
   
 mode: restart
