@@ -27,10 +27,11 @@ blueprint:
     region_name:
       name: Region Name
       description: Region (data.data.Name)
-      optional:
+      
       selector:
         text:
           type: text
+      default: ""
         
     helper_input_boolean:
       name: Motion helper
